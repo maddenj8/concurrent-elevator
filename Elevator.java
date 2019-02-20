@@ -12,6 +12,5 @@ public class Elevator implements Runnable {
 
     public static void main(String [] args) {
         (new Thread(new Elevator())).start();
-        // do some stuff 
     }
 }

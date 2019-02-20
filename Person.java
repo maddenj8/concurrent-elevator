@@ -2,10 +2,7 @@ import java.util.*;
 
 public class Person implements Runnable {
     public void run() {
-        System.out.println("This is the Person Thread");
-    }
-
-    public static void main(String [] args) {
-        (new Thread(new Person())).start();
+	Thread t = Thread.currentThread(); // get this current thread
+        System.out.println("Hi, my name is " + t.getName());
     }
 }
