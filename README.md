@@ -11,3 +11,12 @@ You have been hired by an airport to build an elevator controller in the 10 floo
 * When not in service, the elevator waits at the last floor it visited and 'sleeps'.
 
 You have to come up with a way of storing the requests to the elevator e.g. if a person is accessing the elevator at the 3rd floor and some body is trying to get access from the 5th floor then latter person has to wait before he could place his request. In other words (s)he has to be put in a queue.  Also if the elevator is going upwards all the requests for the destinations downwards should not be accepted until it starts its downward motion and vice versa.
+
+## Instructions
+
+Assuming the current working directory is the project directory enter the following commands into the command line.
+
+```
+javac *.java
+java Controller
+```
