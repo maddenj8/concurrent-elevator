@@ -5,7 +5,7 @@ public class Person implements Runnable {
     public int end_floor;
     public int person_weight;
     public int trolly_weight;
-    public Map<Integer, Person> requests;
+    public Map<Integer, Request> requests;
     public int TOTAL_FLOORS;
     public String name;
 
@@ -28,7 +28,7 @@ public class Person implements Runnable {
 
                 Thread t = Thread.currentThread(); // get this current thread
                 System.out.println("Hi, my name is " + name);
-                System.out.println("I weigh " +  person_weight);
+                System.out.println("I weigh " +  person_weight + "kg");
                 System.out.println("I am on floor " +  start_floor + " and am going to floor " + end_floor);
 
 				id++;
@@ -41,7 +41,7 @@ public class Person implements Runnable {
 
     }
 
-    public Person(Map<Integer, Person> requests, int TOTAL_FLOORS) {
+    public Person(Map<Integer, Request> requests, int TOTAL_FLOORS) {
         this.requests = requests;
         this.TOTAL_FLOORS = TOTAL_FLOORS;
     }

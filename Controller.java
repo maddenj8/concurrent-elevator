@@ -9,7 +9,7 @@ public class Controller {
 		// the thread for now just to keep it simple
 
 		final int TOTAL_FLOORS = 10;
-		Map<Integer, Person> requests = Collections.synchronizedMap(new HashMap<Integer, Person>());
+		Map<Integer, Request> requests = Collections.synchronizedMap(new HashMap<Integer, Request>());
 		Person person = new Person(requests, TOTAL_FLOORS);
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
 		new Thread(person).start();
