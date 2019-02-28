@@ -14,5 +14,9 @@ public class Elevator implements Runnable {
 
     public void run() {
         System.out.println("This is the elevator thread");
+        try {
+            Thread.sleep(10000);
+        } catch (Exception e) {}
+        System.out.println(requests);
     }
 }

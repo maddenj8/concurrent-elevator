@@ -30,6 +30,8 @@ public class Person implements Runnable {
                 System.out.println("Hi, my name is " + name);
                 System.out.println("I weigh " +  person_weight + "kg");
                 System.out.println("I am on floor " +  start_floor + " and am going to floor " + end_floor);
+                Request request = new Request(this.end_floor, this.person_weight, this.name);
+                requests.put(end_floor, request);
 
 				id++;
 			}
