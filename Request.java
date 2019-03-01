@@ -4,11 +4,11 @@ import java.util.*;
 
 public class Request {
     public int dest;
-    public int personWeight;
+    public int personTrollyWeight;
     public String personName;
-    public Request(int dest, int personWeight, String personName) {
+    public Request(int dest, int personTrollyWeight, String personName) {
         this.dest = dest;
-        this.personWeight = personWeight;
+        this.personTrollyWeight = personTrollyWeight;
         this.personName = personName;
     }
 }

@@ -1,10 +1,11 @@
 import java.util.*;
 
 public class Person implements Runnable {
-    public int start_floor;
-    public int end_floor;
-    public int person_weight;
-    public int trolly_weight;
+	public int MAX_TROLLY_WEIGHT = 32;
+    public int startFloor;
+    public int endFloor;
+    public int personWeight;
+    public int trollyWeight = 0;
     public Map<Integer, Request> requests;
     public int TOTAL_FLOORS;
     public String name;
@@ -15,23 +16,26 @@ public class Person implements Runnable {
 			int randomInterval = (int) Math.round(Math.random() * 500);
 			if (randomInterval > 450) {
                 name = "Person_" + String.valueOf(id);
-                Random r = new Random();
-                double tmp_person_weight = r.nextGaussian() * 15 + 73; 
-                trolly_weight = (int) Math.round(Math.random() * 9);
-                this.person_weight = (int) tmp_person_weight;
+				Random r = new Random();
+				if ((int) Math.round(Math.random()) == 1) { // 1= trolly; 0 = no trolly
+					trollyWeight = (int) Math.round(Math.random() * MAX_TROLLY_WEIGHT); // 32 because that is the max you can check in with Ryanair
+				}
+				double tmp_person_weight = r.nextGaussian() * 15 + 73; 
+                this.personWeight = (int) tmp_person_weight;
                 
                 do {
-                    this.start_floor = (int) Math.round(Math.random() * 9);
-                    this.end_floor = (int) Math.round(Math.random() * 9);
+                    this.startFloor = (int) Math.round(Math.random() * 9);
+                    this.endFloor = (int) Math.round(Math.random() * 9);
                 }
-                while(start_floor == end_floor);
+                while(startFloor == endFloor);
 
                 Thread t = Thread.currentThread(); // get this current thread
                 System.out.println("Hi, my name is " + name);
-                System.out.println("I weigh " +  person_weight + "kg");
-                System.out.println("I am on floor " +  start_floor + " and am going to floor " + end_floor);
-                Request request = new Request(this.end_floor, this.person_weight, this.name);
-                requests.put(end_floor, request);
+                System.out.println("I weigh " +  personWeight + "kg");
+				System.out.println("I am on floor " +  startFloor + " and am going to floor " + endFloor);
+				System.out.println("My trolly weighs " + trollyWeight + "kg");
+                Request request = new Request(this.endFloor, this.personWeight + this.trollyWeight, this.name);
+                requests.put(startFloor, request);
 
 				id++;
 			}
