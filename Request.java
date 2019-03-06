@@ -6,7 +6,9 @@ public class Request {
     public int dest;
     public int personTrollyWeight;
     public String personName;
-    public Request(int dest, int personTrollyWeight, String personName) {
+    public int startFloor;
+    public Request(int startFloor, int dest, int personTrollyWeight, String personName) {
+        this.startFloor = startFloor;
         this.dest = dest;
         this.personTrollyWeight = personTrollyWeight;
         this.personName = personName;
