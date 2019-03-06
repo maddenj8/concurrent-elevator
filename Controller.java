@@ -10,9 +10,9 @@ public class Controller {
 
 		final int TOTAL_FLOORS = 10;
 		Map<Integer, Request> requests = Collections.synchronizedMap(new HashMap<Integer, Request>());
-		Person person = new Person(requests, TOTAL_FLOORS);
+		Generator generator = new Generator(requests, TOTAL_FLOORS);
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
-		new Thread(person).start();
+		new Thread(generator).start();
 		new Thread(elevator).start();
 	}
 }

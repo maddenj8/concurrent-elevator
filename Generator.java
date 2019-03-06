@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Person implements Runnable {
+public class Generator implements Runnable {
 	public int MAX_TROLLY_WEIGHT = 32;
     public int startFloor;
     public int endFloor;
@@ -47,7 +47,7 @@ public class Person implements Runnable {
 
     }
 
-    public Person(Map<Integer, Request> requests, int TOTAL_FLOORS) {
+    public Generator(Map<Integer, Request> requests, int TOTAL_FLOORS) {
         this.requests = requests;
         this.TOTAL_FLOORS = TOTAL_FLOORS;
     }
