@@ -9,10 +9,11 @@ public class Generator implements Runnable {
     public Map<Integer, Request> requests;
     public int TOTAL_FLOORS;
     public String name;
+    private Elevator elevator;
 
     public void run() {
         int id = 0;
-		while (true) {
+		while (id < 5) { // just for testing while(true) normally
 			int randomInterval = (int) Math.round(Math.random() * 500);
 			if (randomInterval > 450) {
                 name = "Person_" + String.valueOf(id);
@@ -34,7 +35,8 @@ public class Generator implements Runnable {
                 System.out.println("I weigh " +  personWeight + "kg");
 				System.out.println("I am on floor " +  startFloor + " and am going to floor " + endFloor);
 				System.out.println("My trolly weighs " + trollyWeight + "kg");
-                Request request = new Request(this.endFloor, this.personWeight + this.trollyWeight, this.name);
+                Request request = new Request(this.startFloor, this.endFloor, this.personWeight + this.trollyWeight, this.name);
+                elevator.newRequest(request);
                 requests.put(startFloor, request);
 
 				id++;
@@ -47,8 +49,18 @@ public class Generator implements Runnable {
 
     }
 
-    public Generator(Map<Integer, Request> requests, int TOTAL_FLOORS) {
+    public Generator(Map<Integer, Request> requests, int TOTAL_FLOORS, Elevator elevator) {
         this.requests = requests;
         this.TOTAL_FLOORS = TOTAL_FLOORS;
+        this.elevator = elevator;
+    }
+
+    public static void main(String [] args) {
+		final int TOTAL_FLOORS = 10;
+		Map<Integer, Request> requests = Collections.synchronizedMap(new HashMap<Integer, Request>());
+		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
+		Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
+		new Thread(generator).start(); // start generating people
+		new Thread(elevator).start(); // start up the elevator
     }
 }
