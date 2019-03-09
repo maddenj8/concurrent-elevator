@@ -1,13 +1,17 @@
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 
 public class Elevator implements Runnable {
     private int maxWeight = 1000; // in kg obviously
     private int currentWeight = 0; // current weight carrying
     private int currentFloor = 1; // start at floor one
-    private BlockingQueue<Request> peopleInElevator = new BlockingQueue<Request>(); // keep track of people in elevator at one time
+    BlockingQueue<Request> peopleInElevator = new ArrayBlockingQueue<>(50); // keep track of people in elevator at one time
     public static Map<Integer, Request> requests;
     public int TOTAL_FLOORS;
+    private int TRAVEL_TIME = 1000; // should be 100 but 1000 is easier to test
+    private int tick_count = 0;
 
     private String state = "SLEEP";
     private int lowestRequested = 10; // floor request that goes the lowest
@@ -32,32 +36,47 @@ public class Elevator implements Runnable {
         // that is the next problem.
 
         while(true) {
+
+            // before checking what floors to move to and such
+            // this is where you check who is to get off and 
+            // who is in the hashmap waiting to get on
+            // All of this should be separated into a set of
+            // functions so that the loop simply checks the movement
+            // of people, checks the movement of the elevator and goes
+            // sleep until the next cycle.
+
             if (!this.elevatorRequested) {
                 System.out.println("Sleeping");
                 try {
-                    Thread.sleep(1000); // wait time to check for state change
+                    Thread.sleep(TRAVEL_TIME); // wait time to check for state change
                 } catch(Exception e) {}
             }
             else if (this.state == "UP" && this.currentFloor <= TOTAL_FLOORS) {
                 if (this.currentFloor == this.highestRequested) {
                     this.state = "DOWN";
                 }
-                else {this.currentFloor++;}
+                else if (this.currentFloor < TOTAL_FLOORS) {this.currentFloor++;}
+                else {this.state = "DOWN";}
                 try {
-                    Thread.sleep(1000); // travel time to next floor
+                    Thread.sleep(TRAVEL_TIME); // travel time to next floor
                 } catch(Exception e) {}
             }
             else if (this.state == "DOWN" && this.currentFloor >= 0) {
                 if (this.currentFloor == this.lowestRequested) {
                     this.state = "UP";
                 }
-                else {this.currentFloor--;}
+                else if (this.currentFloor > 0) {this.currentFloor--;}
+                else {this.state = "UP";}
                 try {
-                    Thread.sleep(1000); // travel time to next floor
+                    Thread.sleep(TRAVEL_TIME); // travel time to next floor
                 } catch(Exception e) {}
             }
             System.out.println(">>> On floor " + this.currentFloor + " and I am going " + this.state);
             System.out.println("Lowest Requested " + this.lowestRequested + " Higest Requested " + this.highestRequested);
+
+            if (this.peopleInElevator.size() == 0) {
+                this.elevatorRequested = false;
+            }
         }
     }
 
@@ -78,7 +97,7 @@ public class Elevator implements Runnable {
         // also this should all be moved to the Controller
         // class since that is in charge of handling the 
         // requests and the movement of the elevators.
-
+        
         synchronized(this) {
             this.elevatorRequested = true;
             if (this.state == "SLEEP") {
@@ -93,13 +112,13 @@ public class Elevator implements Runnable {
                 this.lowestRequested = request.startFloor;
 
             if (request.totalWeight + this.currentWeight <= 1000){
-                peopleInElevator.add( request );
+                peopleInElevator.add(request);
                 this.currentWeight += request.totalWeight;
             }
-            //  odd stuff going on I can only use request.startFloor
 
             System.out.println(this.state);
             System.out.println(this.currentFloor);
+            System.out.println(this.currentWeight);
         }
 
         // otherwise nothing special has to be done and the request can
