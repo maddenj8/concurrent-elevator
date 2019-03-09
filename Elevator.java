@@ -5,7 +5,7 @@ public class Elevator implements Runnable {
     private int maxWeight = 1000; // in kg obviously
     private int currentWeight = 0; // current weight carrying
     private int currentFloor = 1; // start at floor one
-    private LinkedList<Request> peopleInElevator = new LinkedList<Request>(); // keep track of people in elevator at one time
+    private BlockingQueue<Request> peopleInElevator = new BlockingQueue<Request>(); // keep track of people in elevator at one time
     public static Map<Integer, Request> requests;
     public int TOTAL_FLOORS;
 
