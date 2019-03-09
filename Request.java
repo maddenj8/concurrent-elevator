@@ -4,13 +4,13 @@ import java.util.*;
 
 public class Request {
     public int dest;
-    public int personTrollyWeight;
+    public int totalWeight;
     public String personName;
     public int startFloor;
-    public Request(int startFloor, int dest, int personTrollyWeight, String personName) {
+    public Request(int startFloor, int dest, int totalWeight, String personName) {
         this.startFloor = startFloor;
         this.dest = dest;
-        this.personTrollyWeight = personTrollyWeight;
+        this.totalWeight = totalWeight;
         this.personName = personName;
     }
 }

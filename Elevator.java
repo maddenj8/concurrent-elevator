@@ -1,7 +1,9 @@
 import java.util.*;
 
+
 public class Elevator implements Runnable {
     private int maxWeight = 1000; // in kg obviously
+    private int currentWeight = 0; // current weight carrying
     private int currentFloor = 1; // start at floor one
     private LinkedList<Request> peopleInElevator = new LinkedList<Request>(); // keep track of people in elevator at one time
     public static Map<Integer, Request> requests;
@@ -15,10 +17,10 @@ public class Elevator implements Runnable {
     public Elevator(Map<Integer, Request> requests, int TOTAL_FLOORS) {
         this.requests = requests;
         this.TOTAL_FLOORS = TOTAL_FLOORS;
+        this.currentFloor = currentFloor;
     }
 
     public void run() {
-
         // PROBLEM: trying to detect when there is no request
         // when a request comes in we can set requested to true
         // but when do you say there is no request. 
@@ -89,6 +91,15 @@ public class Elevator implements Runnable {
 
             else if (request.startFloor < this.lowestRequested)
                 this.lowestRequested = request.startFloor;
+
+            if (request.totalWeight + this.currentWeight <= 1000){
+                peopleInElevator.add( request );
+                this.currentWeight += request.totalWeight;
+            }
+            //  odd stuff going on I can only use request.startFloor
+
+            System.out.println(this.state);
+            System.out.println(this.currentFloor);
         }
 
         // otherwise nothing special has to be done and the request can
