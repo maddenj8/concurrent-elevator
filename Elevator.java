@@ -8,8 +8,8 @@ public class Elevator implements Runnable {
     public int TOTAL_FLOORS;
 
     private String state = "SLEEP";
-    private int lowestRequested; // floor request that goes the lowest
-    private int highestRequested; // floor request that goes the highest
+    private int lowestRequested = 10; // floor request that goes the lowest
+    private int highestRequested = 0; // floor request that goes the highest
     private Boolean elevatorRequested = false;
 
     public Elevator(Map<Integer, Request> requests, int TOTAL_FLOORS) {
@@ -31,28 +31,31 @@ public class Elevator implements Runnable {
 
         while(true) {
             if (!this.elevatorRequested) {
+                System.out.println("Sleeping");
                 try {
-                    Thread.sleep(100); // wait time to check for state change
+                    Thread.sleep(1000); // wait time to check for state change
                 } catch(Exception e) {}
             }
-            else if (this.state == "UP" && this.currentFloor < TOTAL_FLOORS) {
+            else if (this.state == "UP" && this.currentFloor <= TOTAL_FLOORS) {
                 if (this.currentFloor == this.highestRequested) {
                     this.state = "DOWN";
                 }
                 else {this.currentFloor++;}
                 try {
-                    Thread.sleep(100); // travel time to next floor
+                    Thread.sleep(1000); // travel time to next floor
                 } catch(Exception e) {}
             }
-            else if (this.state == "DOWN" && this.currentFloor > 0) {
+            else if (this.state == "DOWN" && this.currentFloor >= 0) {
                 if (this.currentFloor == this.lowestRequested) {
                     this.state = "UP";
                 }
                 else {this.currentFloor--;}
                 try {
-                    Thread.sleep(100); // travel time to next floor
+                    Thread.sleep(1000); // travel time to next floor
                 } catch(Exception e) {}
             }
+            System.out.println(">>> On floor " + this.currentFloor + " and I am going " + this.state);
+            System.out.println("Lowest Requested " + this.lowestRequested + " Higest Requested " + this.highestRequested);
         }
     }
 
@@ -86,9 +89,6 @@ public class Elevator implements Runnable {
 
             else if (request.startFloor < this.lowestRequested)
                 this.lowestRequested = request.startFloor;
-
-            System.out.println(this.state);
-            System.out.println(this.currentFloor);
         }
 
         // otherwise nothing special has to be done and the request can
