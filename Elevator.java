@@ -8,15 +8,15 @@ public class Elevator implements Runnable {
     private int currentWeight = 0; // current weight carrying
     private int currentFloor = 1; // start at floor one
     BlockingQueue<Request> peopleInElevator = new ArrayBlockingQueue<>(50); // keep track of people in elevator at one time
-    public static Map<Integer, Request> requests;
+    public static volatile Map<Integer, Request> requests;
     public int TOTAL_FLOORS;
     private int TRAVEL_TIME = 1000; // should be 100 but 1000 is easier to test
     private int tick_count = 0;
 
-    private String state = "SLEEP";
-    private int lowestRequested = 10; // floor request that goes the lowest
-    private int highestRequested = 0; // floor request that goes the highest
-    private Boolean elevatorRequested = false;
+    private volatile String state = "SLEEP";
+    private volatile int lowestRequested = 10; // floor request that goes the lowest
+    private volatile int highestRequested = 0; // floor request that goes the highest
+    private volatile Boolean elevatorRequested = false;
 
     public Elevator(Map<Integer, Request> requests, int TOTAL_FLOORS) {
         this.requests = requests;
@@ -35,49 +35,65 @@ public class Elevator implements Runnable {
         // still not set you can assume there is no new requests made.
         // that is the next problem.
 
+        // before checking what floors to move to and such
+        // this is where you check who is to get off and 
+        // who is in the hashmap waiting to get on
+        // All of this should be separated into a set of
+        // functions so that the loop simply checks the movement
+        // of people, checks the movement of the elevator and goes
+        // sleep until the next cycle.
+
+        // remember when a person gets into the elevator, their
+        // destination can sway the highest or lowest requested
+        // floor so if the elevator and someone gets in wanting to
+        // go higher, the elevator keeps going up rather than going down.
+        
         while(true) {
-
-            // before checking what floors to move to and such
-            // this is where you check who is to get off and 
-            // who is in the hashmap waiting to get on
-            // All of this should be separated into a set of
-            // functions so that the loop simply checks the movement
-            // of people, checks the movement of the elevator and goes
-            // sleep until the next cycle.
-
-            if (!this.elevatorRequested) {
-                System.out.println("Sleeping");
-                try {
-                    Thread.sleep(TRAVEL_TIME); // wait time to check for state change
-                } catch(Exception e) {}
-            }
-            else if (this.state == "UP" && this.currentFloor <= TOTAL_FLOORS) {
-                if (this.currentFloor == this.highestRequested) {
-                    this.state = "DOWN";
-                }
-                else if (this.currentFloor < TOTAL_FLOORS) {this.currentFloor++;}
-                else {this.state = "DOWN";}
-                try {
-                    Thread.sleep(TRAVEL_TIME); // travel time to next floor
-                } catch(Exception e) {}
-            }
-            else if (this.state == "DOWN" && this.currentFloor >= 0) {
-                if (this.currentFloor == this.lowestRequested) {
-                    this.state = "UP";
-                }
-                else if (this.currentFloor > 0) {this.currentFloor--;}
-                else {this.state = "UP";}
-                try {
-                    Thread.sleep(TRAVEL_TIME); // travel time to next floor
-                } catch(Exception e) {}
-            }
-            System.out.println(">>> On floor " + this.currentFloor + " and I am going " + this.state);
-            System.out.println("Lowest Requested " + this.lowestRequested + " Higest Requested " + this.highestRequested);
-
-            if (this.peopleInElevator.size() == 0) {
-                this.elevatorRequested = false;
-            }
+            System.out.println(this.requests.get(this.currentFloor) + " are on the current floor " + this.currentFloor); // null if nobody is on that floor
+            this.determinePeopleMovement();
+            this.chooseDirection();
         }
+    }
+
+    private void chooseDirection() {
+        if (this.state == "SLEEP") {
+            System.out.println("Sleeping");
+            try {
+                Thread.sleep(TRAVEL_TIME); // wait time to check for state change
+            } catch(Exception e) {}
+        }
+        else if (this.state == "UP" && this.currentFloor <= TOTAL_FLOORS) {
+            if (this.currentFloor == this.highestRequested) {
+                this.state = "DOWN";
+            }
+            else if (this.currentFloor < TOTAL_FLOORS) {this.currentFloor++;}
+            else {this.state = "DOWN";}
+            try {
+                Thread.sleep(TRAVEL_TIME); // travel time to next floor
+            } catch(Exception e) {}
+        }
+        else if (this.state == "DOWN" && this.currentFloor >= 0) {
+            if (this.currentFloor == this.lowestRequested) {
+                this.state = "UP";
+            }
+            else if (this.currentFloor > 0) {this.currentFloor--;}
+            else {this.state = "UP";}
+            try {
+                Thread.sleep(TRAVEL_TIME); // travel time to next floor
+            } catch(Exception e) {}
+        }
+        System.out.println(">>> On floor " + this.currentFloor + " and I am going " + this.state);
+        System.out.println("Lowest Requested " + this.lowestRequested + " Higest Requested " + this.highestRequested);
+
+        if (this.peopleInElevator.size() == 0) {
+            this.elevatorRequested = false;
+        }
+    }
+
+    private void determinePeopleMovement() {
+        // this is where we determine who gets to get
+        // on and how the people in the elevator change
+        // the highest and lowest requested floors
     }
 
     public void newRequest(Request request) {
@@ -105,20 +121,23 @@ public class Elevator implements Runnable {
                 else {this.state = "UP";}
             }
 
-            else if (request.startFloor > this.highestRequested) 
-                this.highestRequested = request.startFloor;
-
-            else if (request.startFloor < this.lowestRequested)
+            if (request.startFloor < this.lowestRequested) 
                 this.lowestRequested = request.startFloor;
 
-            if (request.totalWeight + this.currentWeight <= 1000){
+            else if (request.startFloor > this.highestRequested)
+                this.highestRequested = request.startFloor;
+
+            if (request.totalWeight + this.currentWeight <= 1000 && request.startFloor == this.currentFloor) { // if you fit and it's on your floor get in
                 peopleInElevator.add(request);
                 this.currentWeight += request.totalWeight;
             }
+            else {
+                requests.put(request.startFloor, request); // add to the hashmap
+            }
 
-            System.out.println(this.state);
-            System.out.println(this.currentFloor);
-            System.out.println(this.currentWeight);
+            // System.out.println(this.state);
+            // System.out.println(this.currentFloor);
+            // System.out.println(this.currentWeight);
         }
 
         // otherwise nothing special has to be done and the request can

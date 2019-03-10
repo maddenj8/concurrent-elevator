@@ -37,7 +37,6 @@ public class Generator implements Runnable {
 				System.out.println("My trolly weighs " + trollyWeight + "kg");
                 Request request = new Request(this.startFloor, this.endFloor, this.personWeight + this.trollyWeight, this.name);
                 elevator.newRequest(request);
-                requests.put(startFloor, request);
 
 				id++;
 			}
