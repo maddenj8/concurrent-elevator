@@ -33,8 +33,8 @@ public class Generator implements Runnable {
                 Thread t = Thread.currentThread(); // get this current thread
                 System.out.println("Hi, my name is " + name);
                 System.out.println("I weigh " +  personWeight + "kg");
-				System.out.println("I am on floor " +  startFloor + " and am going to floor " + endFloor);
-				System.out.println("My trolly weighs " + trollyWeight + "kg");
+		 			 System.out.println("I am on floor " +  startFloor + " and am going to floor " + endFloor);
+					 System.out.println("My trolly weighs " + trollyWeight + "kg");
                 Request request = new Request(this.startFloor, this.endFloor, this.personWeight + this.trollyWeight, this.name);
                 elevator.newRequest(request);
 
@@ -58,8 +58,10 @@ public class Generator implements Runnable {
 		final int TOTAL_FLOORS = 10;
 		Map<Integer, Request> requests = Collections.synchronizedMap(new HashMap<Integer, Request>());
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
+		Music  music = new Music( );
 		Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
 		new Thread(generator).start(); // start generating people
+		new Thread(music).start(); // start generating people
 		new Thread(elevator).start(); // start up the elevator
     }
 }
