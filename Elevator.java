@@ -93,8 +93,27 @@ public class Elevator implements Runnable {
     private void determinePeopleMovement() {
         // this is where we determine who gets to get
         // on and how the people in the elevator change
-        // the highest and lowest requested floors
+	for (Map.Entry<Integer, Request> request : requests.entrySet())
+	{
+		if ( request.getValue().startFloor == this.currentFloor   ){
+		    if (request.getValue().totalWeight + this.currentWeight <= 1000 && request.getValue().startFloor == this.currentFloor) { // if you fit and it's on your floor get in
+			Request reqForLl = new Request(request.getValue().startFloor, request.getValue().dest, request.getValue().totalWeight, request.getValue().personName);
+			peopleInElevator.add(reqForLl);
+			this.currentWeight += request.getValue().totalWeight;
+			System.out.println(request.getValue().personName + " Gets on at " +  this.currentFloor); //get on 
+			requests.remove(request); //remove here so people are not added twice
+			}
+		}
+		for ( Request requestLl :  peopleInElevator ){
+			if (requestLl.dest == this.currentFloor ){
+				System.out.println(requestLl.personName + " Gets off at " +  this.currentFloor + " he will be missed " );
+				peopleInElevator.remove(requestLl);
+			}
+		}
+    	}
     }
+    	
+	      
 
     public void newRequest(Request request) {
         // function to be called when request is added to the map
@@ -134,7 +153,7 @@ public class Elevator implements Runnable {
             else {
                 requests.put(request.startFloor, request); // add to the hashmap
             }
-
+	
             // System.out.println(this.state);
             // System.out.println(this.currentFloor);
             // System.out.println(this.currentWeight);
