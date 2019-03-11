@@ -8,7 +8,7 @@ public class Elevator implements Runnable {
     private int currentWeight = 0; // current weight carrying
     private int currentFloor = 1; // start at floor one
     BlockingQueue<Request> peopleInElevator = new ArrayBlockingQueue<>(50); // keep track of people in elevator at one time
-    public static volatile Map<Integer, Request> requests;
+    public static volatile Map<Integer, ArrayList> requests;
     public int TOTAL_FLOORS;
     private int TRAVEL_TIME = 1000; // should be 100 but 1000 is easier to test
     private int tick_count = 0;
@@ -17,8 +17,9 @@ public class Elevator implements Runnable {
     private volatile int lowestRequested = 10; // floor request that goes the lowest
     private volatile int highestRequested = 0; // floor request that goes the highest
     private volatile Boolean elevatorRequested = false;
+    // private Music music = new Music();
 
-    public Elevator(Map<Integer, Request> requests, int TOTAL_FLOORS) {
+    public Elevator(Map<Integer, ArrayList> requests, int TOTAL_FLOORS) {
         this.requests = requests;
         this.TOTAL_FLOORS = TOTAL_FLOORS;
         this.currentFloor = currentFloor;
@@ -89,17 +90,17 @@ public class Elevator implements Runnable {
         // System.out.println("HIT THIS ONE: " + requests.get(this.currentFloor));
         // requests.get(this.currentFloor)
         
-        for (Map.Entry<Integer, Request> request : requests.entrySet()) {
-            if ( request.getValue().startFloor == this.currentFloor ) {
-                if (request.getValue().totalWeight + this.currentWeight <= 1000 && request.getValue().startFloor == this.currentFloor) { // if you fit and it's on your floor get in
-                    Request reqForLl = new Request(request.getValue().startFloor, request.getValue().dest, request.getValue().totalWeight, request.getValue().personName);
-                    peopleInElevator.add(reqForLl);
-                    this.currentWeight += request.getValue().totalWeight;
-                    System.out.println(request.getValue().personName + " Gets on at " +  this.currentFloor); //get on 
-                    requests.remove(request); //remove here so people are not added twice
-                }
-            }
-        }
+        // for (Map.Entry<Integer, Request> request : requests.entrySet()) {
+        //     if ( request.getValue().startFloor == this.currentFloor ) {
+        //         if (request.getValue().totalWeight + this.currentWeight <= 1000 && request.getValue().startFloor == this.currentFloor) { // if you fit and it's on your floor get in
+        //             Request reqForLl = new Request(request.getValue().startFloor, request.getValue().dest, request.getValue().totalWeight, request.getValue().personName);
+        //             peopleInElevator.add(reqForLl);
+        //             this.currentWeight += request.getValue().totalWeight;
+        //             System.out.println(request.getValue().personName + " Gets on at " +  this.currentFloor); //get on 
+        //             requests.remove(request); //remove here so people are not added twice
+        //         }
+        //     }
+        // }
     }
     	
 	      
@@ -125,10 +126,11 @@ public class Elevator implements Runnable {
         synchronized(this) {
             if (request.startFloor == this.currentFloor && request.totalWeight + this.currentWeight <= this.maxWeight) {
                 this.peopleInElevator.add(request);
+                // music.ding();
             }
 
             else {
-                requests.put(request.startFloor, request);
+                requests.get(request.startFloor).add(request);
             }
 
             // System.out.println(this.state);

@@ -56,14 +56,25 @@ public class Generator implements Runnable {
         this.elevator = elevator;
     }
 
+    public static ConcurrentHashMap createRequestMap() {
+        ConcurrentHashMap map = new ConcurrentHashMap();
+        for (int i = 0; i < 11; i++) {
+            map.put(i, new ArrayList<Request>());
+        }
+        System.out.println(map);
+        return map;
+    }
+
     public static void main(String [] args) {
 		final int TOTAL_FLOORS = 10;
-		ConcurrentHashMap requests = new ConcurrentHashMap();
+		ConcurrentHashMap requests = Generator.createRequestMap();
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
-		// Music  music = new Music( );
+		// Music  music = new Music();
 		Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
 		new Thread(generator).start(); // start generating people
 		// new Thread(music).start(); // start generating people
 		new Thread(elevator).start(); // start up the elevator
     }
+
+    // make the requests map prior to starting threads 
 }
