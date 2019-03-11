@@ -100,6 +100,16 @@ public class Elevator implements Runnable {
             }
         }     
         
+        if (requests.get(this.currentFloor) instanceOf LinkedList) {
+            for (Request request : requests.get(this.currentFloor)) {
+                System.out.println(request);
+            }
+        }
+        else {
+            System.out.println(requests.get(this.currentFloor));
+        }
+        // requests.get(this.currentFloor)
+        
         for (Map.Entry<Integer, Request> request : requests.entrySet()) {
             if ( request.getValue().startFloor == this.currentFloor ) {
                 if (request.getValue().totalWeight + this.currentWeight <= 1000 && request.getValue().startFloor == this.currentFloor) { // if you fit and it's on your floor get in
