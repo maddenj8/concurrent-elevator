@@ -91,28 +91,26 @@ public class Elevator implements Runnable {
     }
 
     private void determinePeopleMovement() {
-        // this is where we determine who gets to get
-	 for ( Request requestLl :  peopleInElevator ){
-			if (requestLl.dest == this.currentFloor ){
-				System.out.println(requestLl.personName + " Gets off at " +  this.currentFloor + " he will be missed " );
-				this.currentWeight -= requestLl.totalWeight;
-				peopleInElevator.remove(requestLl); //gets off the elevator 
-			}
-		}     
-
-	for (Map.Entry<Integer, Request> request : requests.entrySet())
-	{
-		if ( request.getValue().startFloor == this.currentFloor   ){
-		    if (request.getValue().totalWeight + this.currentWeight <= 1000 && request.getValue().startFloor == this.currentFloor) { // if you fit and it's on your floor get in
-			Request reqForLl = new Request(request.getValue().startFloor, request.getValue().dest, request.getValue().totalWeight, request.getValue().personName);
-			peopleInElevator.add(reqForLl);
-			this.currentWeight += request.getValue().totalWeight;
-			System.out.println(request.getValue().personName + " Gets on at " +  this.currentFloor); //get on 
-			requests.remove(request); //remove here so people are not added twice
-			}
-		}
-
-    	}
+        // this is where we determine who gets to get out
+        for ( Request requestLl :  peopleInElevator ) {
+            if (requestLl.dest == this.currentFloor ) {
+                System.out.println(requestLl.personName + " Gets off at " +  this.currentFloor + " he will be missed " );
+                this.currentWeight -= requestLl.totalWeight;
+                peopleInElevator.remove(requestLl); // gets off the elevator 
+            }
+        }     
+        
+        for (Map.Entry<Integer, Request> request : requests.entrySet()) {
+            if ( request.getValue().startFloor == this.currentFloor ) {
+                if (request.getValue().totalWeight + this.currentWeight <= 1000 && request.getValue().startFloor == this.currentFloor) { // if you fit and it's on your floor get in
+                    Request reqForLl = new Request(request.getValue().startFloor, request.getValue().dest, request.getValue().totalWeight, request.getValue().personName);
+                    peopleInElevator.add(reqForLl);
+                    this.currentWeight += request.getValue().totalWeight;
+                    System.out.println(request.getValue().personName + " Gets on at " +  this.currentFloor); //get on 
+                    requests.remove(request); //remove here so people are not added twice
+                }
+            }
+        }
     }
     	
 	      
