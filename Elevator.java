@@ -92,7 +92,14 @@ public class Elevator implements Runnable {
 
     private void determinePeopleMovement() {
         // this is where we determine who gets to get
-        // on and how the people in the elevator change
+	 for ( Request requestLl :  peopleInElevator ){
+			if (requestLl.dest == this.currentFloor ){
+				System.out.println(requestLl.personName + " Gets off at " +  this.currentFloor + " he will be missed " );
+				this.currentWeight -= requestLl.totalWeight;
+				peopleInElevator.remove(requestLl); //gets off the elevator 
+			}
+		}     
+
 	for (Map.Entry<Integer, Request> request : requests.entrySet())
 	{
 		if ( request.getValue().startFloor == this.currentFloor   ){
@@ -104,12 +111,7 @@ public class Elevator implements Runnable {
 			requests.remove(request); //remove here so people are not added twice
 			}
 		}
-		for ( Request requestLl :  peopleInElevator ){
-			if (requestLl.dest == this.currentFloor ){
-				System.out.println(requestLl.personName + " Gets off at " +  this.currentFloor + " he will be missed " );
-				peopleInElevator.remove(requestLl);
-			}
-		}
+
     	}
     }
     	
@@ -137,7 +139,7 @@ public class Elevator implements Runnable {
             this.elevatorRequested = true;
             if (this.state == "SLEEP") {
                 if (request.startFloor < this.currentFloor) {this.state = "DOWN";}
-                else {this.state = "UP";}
+                else {this.state = "UP";} //initialisation step when the elevator is empty
             }
 
             if (request.startFloor < this.lowestRequested) 
