@@ -56,38 +56,24 @@ public class Elevator implements Runnable {
     }
 
     private void chooseDirection() {
-        if (this.state == "SLEEP") {
-            System.out.println("Sleeping");
-            try {
-                Thread.sleep(TRAVEL_TIME); // wait time to check for state change
-            } catch(Exception e) {}
+        if (this.currentFloor == TOTAL_FLOORS) {
+            this.state = "DOWN";
         }
-        else if (this.state == "UP" && this.currentFloor <= TOTAL_FLOORS) {
-            if (this.currentFloor == this.highestRequested) {
-                this.state = "DOWN";
-            }
-            else if (this.currentFloor < TOTAL_FLOORS) {this.currentFloor++;}
-            else {this.state = "DOWN";}
-            try {
-                Thread.sleep(TRAVEL_TIME); // travel time to next floor
-            } catch(Exception e) {}
+        else if (this.currentFloor == 0) {
+            this.state = "UP";
         }
-        else if (this.state == "DOWN" && this.currentFloor >= 0) {
-            if (this.currentFloor == this.lowestRequested) {
-                this.state = "UP";
-            }
-            else if (this.currentFloor > 0) {this.currentFloor--;}
-            else {this.state = "UP";}
-            try {
-                Thread.sleep(TRAVEL_TIME); // travel time to next floor
-            } catch(Exception e) {}
+
+        if (this.state == "UP") {
+            this.currentFloor++;
+            try {Thread.sleep(5000);} catch(Exception e) {}
         }
+        else {
+            this.currentFloor--;
+            try {Thread.sleep(5000);} catch(Exception e) {}
+        }
+
         System.out.println(">>> On floor " + this.currentFloor + " and I am going " + this.state);
         System.out.println("Lowest Requested " + this.lowestRequested + " Higest Requested " + this.highestRequested);
-
-        if (this.peopleInElevator.size() == 0) {
-            this.elevatorRequested = false;
-        }
     }
 
     private void determinePeopleMovement() {
@@ -100,14 +86,7 @@ public class Elevator implements Runnable {
             }
         }     
         
-        if (requests.get(this.currentFloor) instanceOf LinkedList) {
-            for (Request request : requests.get(this.currentFloor)) {
-                System.out.println(request);
-            }
-        }
-        else {
-            System.out.println(requests.get(this.currentFloor));
-        }
+        // System.out.println("HIT THIS ONE: " + requests.get(this.currentFloor));
         // requests.get(this.currentFloor)
         
         for (Map.Entry<Integer, Request> request : requests.entrySet()) {
@@ -144,26 +123,14 @@ public class Elevator implements Runnable {
         // requests and the movement of the elevators.
         
         synchronized(this) {
-            this.elevatorRequested = true;
-            if (this.state == "SLEEP") {
-                if (request.startFloor < this.currentFloor) {this.state = "DOWN";}
-                else {this.state = "UP";} //initialisation step when the elevator is empty
+            if (request.startFloor == this.currentFloor && request.totalWeight + this.currentWeight <= this.maxWeight) {
+                this.peopleInElevator.add(request);
             }
 
-            if (request.startFloor < this.lowestRequested) 
-                this.lowestRequested = request.startFloor;
-
-            else if (request.startFloor > this.highestRequested)
-                this.highestRequested = request.startFloor;
-
-            if (request.totalWeight + this.currentWeight <= 1000 && request.startFloor == this.currentFloor) { // if you fit and it's on your floor get in
-                peopleInElevator.add(request);
-                this.currentWeight += request.totalWeight;
-            }
             else {
-                requests.put(request.startFloor, request); // add to the hashmap
+                requests.put(request.startFloor, request);
             }
-	
+
             // System.out.println(this.state);
             // System.out.println(this.currentFloor);
             // System.out.println(this.currentWeight);

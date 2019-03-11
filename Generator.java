@@ -25,7 +25,8 @@ public class Generator implements Runnable {
                 this.personWeight = (int) tmp_person_weight;
                 
                 do {
-                    this.startFloor = (int) Math.round(Math.random() * 9);
+                    // this.startFloor = (int) Math.round(Math.random() * 9);
+                    this.startFloor = 2;
                     this.endFloor = (int) Math.round(Math.random() * 9);
                 }
                 while(startFloor == endFloor);
