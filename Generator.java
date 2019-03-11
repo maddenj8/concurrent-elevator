@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.*;
 
 public class Generator implements Runnable {
 	public int MAX_TROLLY_WEIGHT = 32;
@@ -49,7 +50,7 @@ public class Generator implements Runnable {
 
     }
 
-    public Generator(Map<Integer, Request> requests, int TOTAL_FLOORS, Elevator elevator) {
+    public Generator(ConcurrentHashMap requests, int TOTAL_FLOORS, Elevator elevator) {
         this.requests = requests;
         this.TOTAL_FLOORS = TOTAL_FLOORS;
         this.elevator = elevator;
@@ -57,12 +58,12 @@ public class Generator implements Runnable {
 
     public static void main(String [] args) {
 		final int TOTAL_FLOORS = 10;
-		Map<Integer, Request> requests = Collections.synchronizedMap(new HashMap<Integer, Request>());
+		ConcurrentHashMap requests = new ConcurrentHashMap();
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
-		Music  music = new Music( );
+		// Music  music = new Music( );
 		Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
 		new Thread(generator).start(); // start generating people
-		new Thread(music).start(); // start generating people
+		// new Thread(music).start(); // start generating people
 		new Thread(elevator).start(); // start up the elevator
     }
 }

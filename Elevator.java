@@ -65,15 +65,15 @@ public class Elevator implements Runnable {
 
         if (this.state == "UP") {
             this.currentFloor++;
-            try {Thread.sleep(5000);} catch(Exception e) {}
+            try {Thread.sleep(20000);} catch(Exception e) {}
         }
         else {
             this.currentFloor--;
-            try {Thread.sleep(5000);} catch(Exception e) {}
+            try {Thread.sleep(20000);} catch(Exception e) {}
         }
 
         System.out.println(">>> On floor " + this.currentFloor + " and I am going " + this.state);
-        System.out.println("Lowest Requested " + this.lowestRequested + " Higest Requested " + this.highestRequested);
+        // System.out.println("Lowest Requested " + this.lowestRequested + " Higest Requested " + this.highestRequested);
     }
 
     private void determinePeopleMovement() {
