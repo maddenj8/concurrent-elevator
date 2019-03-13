@@ -69,10 +69,10 @@ public class Generator implements Runnable {
 		final int TOTAL_FLOORS = 10;
 		ConcurrentHashMap requests = Generator.createRequestMap();
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
-		// Music  music = new Music();
+		Music  music = new Music();
 		Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
 		new Thread(generator).start(); // start generating people
-		// new Thread(music).start(); // start generating people
+		new Thread(music).start(); // start generating people
 		new Thread(elevator).start(); // start up the elevator
     }
 

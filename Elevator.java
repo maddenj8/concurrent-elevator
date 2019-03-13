@@ -1,3 +1,6 @@
+// javac -classpath . *.java -source 1.7 -target 1.7
+// forget about this it's just to work on my windows 
+
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -6,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 public class Elevator implements Runnable {
     private int maxWeight = 1000; // in kg obviously
     private int currentWeight = 0; // current weight carrying
-    private int currentFloor = 1; // start at floor one
+    private int currentFloor = 0; // start at floor one
     BlockingQueue<Request> peopleInElevator = new ArrayBlockingQueue<>(50); // keep track of people in elevator at one time
     public static volatile Map<Integer, ArrayList> requests;
     public int TOTAL_FLOORS;
@@ -17,7 +20,7 @@ public class Elevator implements Runnable {
     private volatile int lowestRequested = 10; // floor request that goes the lowest
     private volatile int highestRequested = 0; // floor request that goes the highest
     private volatile Boolean elevatorRequested = false;
-    // private Music music = new Music();
+    private Music music = new Music();
 
     public Elevator(Map<Integer, ArrayList> requests, int TOTAL_FLOORS) {
         this.requests = requests;
@@ -66,11 +69,11 @@ public class Elevator implements Runnable {
 
         if (this.state == "UP") {
             this.currentFloor++;
-            try {Thread.sleep(20000);} catch(Exception e) {}
+            try {Thread.sleep(this.TRAVEL_TIME);} catch(Exception e) {}
         }
         else {
             this.currentFloor--;
-            try {Thread.sleep(20000);} catch(Exception e) {}
+            try {Thread.sleep(this.TRAVEL_TIME);} catch(Exception e) {}
         }
 
         System.out.println(">>> On floor " + this.currentFloor + " and I am going " + this.state);
@@ -84,8 +87,22 @@ public class Elevator implements Runnable {
                 System.out.println(requestLl.personName + " Gets off at " +  this.currentFloor + " he will be missed " );
                 this.currentWeight -= requestLl.totalWeight;
                 peopleInElevator.remove(requestLl); // gets off the elevator 
+                System.out.println("People in the elevator now " + this.peopleInElevator);
             }
         }     
+
+        ArrayList<Request> toRemove = new ArrayList<Request>();
+        for (Object request : requests.get(this.currentFloor)) {
+            Request req = (Request) request;
+            if (req.totalWeight + this.currentWeight < this.maxWeight && req.startFloor == this.currentFloor) {
+                peopleInElevator.add(req);
+                this.currentWeight += req.totalWeight;
+                System.out.println(req.personName + " is getting on at floor " + this.currentFloor + " and is heading to floor " + req.dest);
+                toRemove.add(req);
+            }
+        }
+        requests.get(this.currentFloor).removeAll(toRemove);
+        System.out.println("Requests on this floor now: " + requests.get(this.currentFloor));
         
         // System.out.println("HIT THIS ONE: " + requests.get(this.currentFloor));
         // requests.get(this.currentFloor)
@@ -126,7 +143,7 @@ public class Elevator implements Runnable {
         synchronized(this) {
             if (request.startFloor == this.currentFloor && request.totalWeight + this.currentWeight <= this.maxWeight) {
                 this.peopleInElevator.add(request);
-                // music.ding();
+                music.ding();
             }
 
             else {
