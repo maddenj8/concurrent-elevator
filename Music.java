@@ -12,9 +12,7 @@ public class Music implements Runnable {
 					 clip.start();
 					 clip.loop(Clip.LOOP_CONTINUOUSLY);
 				} 
-				catch (Exception ex) {
-					 ex.printStackTrace();
-				}
+				catch (Exception ex) {}
 		 }	
 		  public  void ding(){
 				try {
@@ -23,8 +21,6 @@ public class Music implements Runnable {
 					 clip.open(audioInputStream);
 					 clip.start();
 				} 
-				catch (Exception ex) {
-					 ex.printStackTrace();
-				}
+				catch (Exception ex) {}
 		 }	
 }

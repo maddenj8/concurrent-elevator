@@ -1,5 +1,8 @@
 import java.util.*;
 import java.util.concurrent.*;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;   
+import java.io.*;
 
 public class Generator implements Runnable {
 	public int MAX_TROLLY_WEIGHT = 32;
@@ -15,8 +18,8 @@ public class Generator implements Runnable {
     public void run() {
         int id = 0;
 		while (id < 5) { // just for testing while(true) normally
-			int randomInterval = (int) Math.round(Math.random() * 500);
-			if (randomInterval > 450) {
+			int randomInterval = (int) Math.round(Math.random() * 200);
+			if (randomInterval > 180) {
                 name = "Person_" + String.valueOf(id);
 				Random r = new Random();
 				if ((int) Math.round(Math.random()) == 1) { // 1= trolly; 0 = no trolly
@@ -25,20 +28,19 @@ public class Generator implements Runnable {
 				double tmp_person_weight = r.nextGaussian() * 15 + 73; 
                 this.personWeight = (int) tmp_person_weight;
                 
-                do {
                     // this.startFloor = (int) Math.round(Math.random() * 9);
-                    this.startFloor = 2;
-                    this.endFloor = (int) Math.round(Math.random() * 9);
-                }
-                while(startFloor == endFloor);
+                this.startFloor = 2;
+                this.endFloor = (int) Math.round(Math.random() * 9);
+
+                // while(startFloor == endFloor) {
+                    // this.startFloor = (int) Math.round(Math.random() * 9);
+                    // this.endFloor = (int) Math.round(Math.random() * 9);
+                // }
 
                 Thread t = Thread.currentThread(); // get this current thread
-                System.out.println("Hi, my name is " + name);
-                System.out.println("I weigh " +  personWeight + "kg");
-		 			 System.out.println("I am on floor " +  startFloor + " and am going to floor " + endFloor);
-					 System.out.println("My trolly weighs " + trollyWeight + "kg");
                 Request request = new Request(this.startFloor, this.endFloor, this.personWeight + this.trollyWeight, this.name);
                 elevator.newRequest(request);
+                Generator.writeToFile(request, "REQUEST");
 
 				id++;
 			}
@@ -61,7 +63,7 @@ public class Generator implements Runnable {
         for (int i = 0; i < 11; i++) {
             map.put(i, new ArrayList<Request>());
         }
-        System.out.println(map);
+        // System.out.println(map);
         return map;
     }
 
@@ -69,12 +71,41 @@ public class Generator implements Runnable {
 		final int TOTAL_FLOORS = 10;
 		ConcurrentHashMap requests = Generator.createRequestMap();
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
-		Music  music = new Music();
+		// Music  music = new Music();
 		Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
 		new Thread(generator).start(); // start generating people
-		new Thread(music).start(); // start generating people
+		// new Thread(music).start(); // start generating people
 		new Thread(elevator).start(); // start up the elevator
     }
 
-    // make the requests map prior to starting threads 
+    public synchronized static void writeToFile(Request request, String state) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime ldt = LocalDateTime.now();
+        String timeStamp = dtf.format(ldt);
+        String output = "";
+
+        if (state == "REQUEST") { // getting on the elevator
+            output = request.personName + " makes request at " + timeStamp + " starting at floor " + request.startFloor + " with the destination floor " + request.dest;
+        }
+        else if (state == "BOARD") {
+            output = request.personName + " is getting in the elevator at floor " + request.startFloor;
+        }
+        else if (state == "DEPART") { // getting off the elevator
+            output = request.personName + " is getting out of the elevator at floor " + request.dest;
+        }
+        // System.out.println(output);
+        try {
+            File file = new File("output.txt");
+
+            if (!(file.exists())) {
+                file.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(file, true);
+            fw.write(output + "\n");
+            fw.flush();
+            fw.close();
+        } catch (Exception e) {e.printStackTrace();}
+    }
+
 }
