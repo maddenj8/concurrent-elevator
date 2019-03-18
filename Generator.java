@@ -93,6 +93,9 @@ public class Generator implements Runnable {
         else if (state == "DEPART") { // getting off the elevator
             output = request.personName + " is getting out of the elevator at floor " + request.dest;
         }
+        else if (state == "FULL") { // getting off the elevator
+            output = request.personName + " is not getting on the elevator as it is full  " + request.dest;
+        }
         // System.out.println(output);
         try {
             File file = new File("output.txt");
