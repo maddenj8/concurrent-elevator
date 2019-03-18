@@ -94,14 +94,18 @@ public class Elevator implements Runnable {
         ArrayList<Request> toRemove = new ArrayList<Request>();
         for (Object request : requests.get(this.currentFloor)) {
             Request req = (Request) request;
-            if (req.totalWeight + this.currentWeight < this.maxWeight && req.startFloor == this.currentFloor) {
-                peopleInElevator.add(req);
-                this.currentWeight += req.totalWeight;
-                // System.out.println(req.personName + " is getting on at floor " + this.currentFloor + " and is heading to floor " + req.dest);
-                Generator.writeToFile(req, "BOARD");
-                toRemove.add(req);
+            if (req.totalWeight + this.currentWeight >= this.maxWeight && req.startFloor == this.currentFloor){
+					Generator.writeToFile(req, "FULL");
+					}
+				if ( req.startFloor == this.currentFloor && req.totalWeight + this.currentWeight <= this.maxWeight    ) {
+						peopleInElevator.add(req);
+						this.currentWeight += req.totalWeight;
+						// System.out.println(req.personName + " is getting on at floor " + this.currentFloor + " and is heading to floor " + req.dest);
+						Generator.writeToFile(req, "BOARD");
+						toRemove.add(req);
+					}
             }
-        }
+        
         requests.get(this.currentFloor).removeAll(toRemove);
     }
     	
@@ -110,11 +114,15 @@ public class Elevator implements Runnable {
     public void newRequest(Request request) {
         
         synchronized(this) {
-            if (request.startFloor == this.currentFloor && request.totalWeight + this.currentWeight <= this.maxWeight) {
-                this.peopleInElevator.add(request);
-                Generator.writeToFile(request, "BOARD");
-                // music.ding();
-            }
+            if (request.totalWeight + this.currentWeight >= this.maxWeight && request.startFloor == this.currentFloor){
+					Generator.writeToFile(request, "FULL");
+					}
+				if ( request.startFloor == this.currentFloor && request.totalWeight + this.currentWeight <= this.maxWeight    ) {
+					peopleInElevator.add(request);
+					this.currentWeight += request.totalWeight;
+					Generator.writeToFile(request, "BOARD");
+					// System.out.println(request.personName + " is getting on at floor " + this.currentFloor + " and is heading to floor " + request.dest);
+					}
 
             else {
                 requests.get(request.startFloor).add(request);
