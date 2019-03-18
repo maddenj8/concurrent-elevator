@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-
 public class Elevator implements Runnable {
     private int maxWeight = 1000; // in kg obviously
     private int currentWeight = 0; // current weight carrying
@@ -60,27 +59,55 @@ public class Elevator implements Runnable {
     }
 
     private void chooseDirection() {
-        if (this.currentFloor == TOTAL_FLOORS) {
-            this.state = "DOWN";
+        if (this.currentFloor == this.highestRequested || this.currentFloor == TOTAL_FLOORS) {
+            if (this.lowestRequested == this.TOTAL_FLOORS) { // if highest requested hasn't changed, no new requests have come in.
+                this.state = "SLEEP";
+                this.elevatorRequested = false;
+            }
+            else {
+                this.state = "DOWN";
+                this.highestRequested = 0; // set back to make first next request guarantee be the highest
+            }
         }
-        else if (this.currentFloor == 0) {
-            this.state = "UP";
+        else if (this.currentFloor == this.lowestRequested || this.currentFloor == 0) {
+            if (this.highestRequested == 0) { // if highest requested hasn't changed then no new request came in
+                this.state = "SLEEP";
+                this.elevatorRequested = false;
+            }
+            else {
+                this.state = "UP";
+                this.lowestRequested = this.TOTAL_FLOORS; // set back to make the first next request guarantee be the lowest.
+            }
         }
 
-        if (this.state == "UP") {
+        if (this.state == "UP" && this.currentFloor < this.TOTAL_FLOORS) {
             this.currentFloor++;
             try {Thread.sleep(this.TRAVEL_TIME);} catch(Exception e) {}
         }
-        else {
+        else if (this.state == "DOWN" && this.currentFloor > 0) {
             this.currentFloor--;
             try {Thread.sleep(this.TRAVEL_TIME);} catch(Exception e) {}
         }
+        else {
+            if (this.elevatorRequested) {
+                this.state = "DOWN";
+            }
+            else {
+                try {
+                    Thread.sleep(100);
+                } catch(Exception e) {}
+            }
+        }
+        System.out.println("-----------------");
+        System.out.println(this.currentFloor);
+
+        System.out.println(this.lowestRequested + " " + this.highestRequested);
     }
 
     private void determinePeopleMovement() {
-        // this is where we determine who gets to get out
-        for ( Request req :  peopleInElevator ) {
-            if (req.dest == this.currentFloor ) {
+        // this is where we determine who gets out
+        for (Request req :  peopleInElevator) {
+            if (req.dest == this.currentFloor) {
                 // System.out.println(requestLl.personName + " Gets off at " +  this.currentFloor + " he will be missed " );
                 Generator.writeToFile(req, "DEPART");
                 this.currentWeight -= req.totalWeight;
@@ -89,49 +116,56 @@ public class Elevator implements Runnable {
         }     
 
         ArrayList<Request> toRemove = new ArrayList<Request>();
+        // System.out.println(">>>>>> " + requests);
+        // System.out.println(this.currentFloor);
         for (Object request : requests.get(this.currentFloor)) {
             Request req = (Request) request;
             if (req.totalWeight + this.currentWeight >= this.maxWeight && req.startFloor == this.currentFloor){
 					Generator.writeToFile(req, "FULL");
-					}
-				if ( req.startFloor == this.currentFloor && req.totalWeight + this.currentWeight <= this.maxWeight    ) {
-						peopleInElevator.add(req);
-						this.currentWeight += req.totalWeight;
-						// System.out.println(req.personName + " is getting on at floor " + this.currentFloor + " and is heading to floor " + req.dest);
-						Generator.writeToFile(req, "BOARD");
-						toRemove.add(req);
-					}
+            }
+            if (req.startFloor == this.currentFloor && req.totalWeight + this.currentWeight <= this.maxWeight) {
+                    peopleInElevator.add(req);
+                    this.currentWeight += req.totalWeight;
+                    Generator.writeToFile(req, "BOARD");
+                    toRemove.add(req);
+                    if (req.dest > this.highestRequested) {this.highestRequested = req.dest;}
+                    else if (req.dest < this.lowestRequested) {this.lowestRequested = req.dest;}
+                }
             }
         
         requests.get(this.currentFloor).removeAll(toRemove);
     }
     	
-	      
-
     public void newRequest(Request request) {
         
         synchronized(this) {
-            if (request.totalWeight + this.currentWeight >= this.maxWeight && request.startFloor == this.currentFloor){
-					Generator.writeToFile(request, "FULL");
-					}
-				if ( request.startFloor == this.currentFloor && request.totalWeight + this.currentWeight <= this.maxWeight    ) {
-					peopleInElevator.add(request);
-					this.currentWeight += request.totalWeight;
-					Generator.writeToFile(request, "BOARD");
-					// System.out.println(request.personName + " is getting on at floor " + this.currentFloor + " and is heading to floor " + request.dest);
-					}
-
+            if (request.startFloor == this.currentFloor) {
+                if (request.totalWeight + this.currentWeight >= this.maxWeight) {
+                    Generator.writeToFile(request, "FULL");
+                }
+                else {
+                    peopleInElevator.add(request);
+                    this.currentWeight += request.totalWeight;
+                    Generator.writeToFile(request, "BOARD");
+                }
+            }
             else {
                 requests.get(request.startFloor).add(request);
+                // System.out.println(requests.get(request.startFloor));
             }
+
+            if (request.startFloor > this.currentFloor && request.startFloor > this.highestRequested) {
+                this.highestRequested = request.startFloor;
+            }
+            else if (request.startFloor < this.currentFloor && request.startFloor < this.lowestRequested) {
+                this.lowestRequested = request.startFloor;
+            }
+            // System.out.println("lowest requested floor: " + this.lowestRequested);
+            // System.out.println("highest requested floor: " + this.highestRequested);
 
             // System.out.println(this.state);
             // System.out.println(this.currentFloor);
             // System.out.println(this.currentWeight);
         }
-
-        // otherwise nothing special has to be done and the request can
-        // just go into the hashmap as standard
-        // this must be synchronized
     }
 }

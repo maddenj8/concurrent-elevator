@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Generator",
+            "request": "launch",
+            "mainClass": "Generator",
+            "projectName": "ca4006-assignment-1_64434bae"
+        }
+    ]
+}

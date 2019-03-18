@@ -1,0 +1,57 @@
+Person_0 makes request at 18/03/2019 19:32:55 starting at floor 3 with the destination floor 2
+Person_0 is getting in the elevator at floor 3
+Person_0 is getting out of the elevator at floor 2
+Person_1 is getting in the elevator at floor 2
+Person_1 makes request at 18/03/2019 19:33:05 starting at floor 2 with the destination floor 5
+Person_2 makes request at 18/03/2019 19:33:15 starting at floor 7 with the destination floor 4
+Person_1 is getting out of the elevator at floor 5
+Person_2 is getting in the elevator at floor 7
+Person_2 is getting out of the elevator at floor 4
+Person_3 makes request at 18/03/2019 19:33:25 starting at floor 0 with the destination floor 8
+Person_4 makes request at 18/03/2019 19:33:35 starting at floor 2 with the destination floor 3
+Person_0 makes request at 18/03/2019 19:35:54 starting at floor 6 with the destination floor 4
+Person_0 is getting in the elevator at floor 6
+Person_0 is getting out of the elevator at floor 4
+Person_1 makes request at 18/03/2019 19:36:04 starting at floor 2 with the destination floor 7
+Person_2 makes request at 18/03/2019 19:36:14 starting at floor 2 with the destination floor 1
+Person_3 makes request at 18/03/2019 19:36:24 starting at floor 0 with the destination floor 2
+Person_0 makes request at 18/03/2019 19:36:31 starting at floor 1 with the destination floor 7
+Person_4 makes request at 18/03/2019 19:36:34 starting at floor 8 with the destination floor 0
+Person_0 makes request at 18/03/2019 19:36:36 starting at floor 6 with the destination floor 7
+Person_0 is getting in the elevator at floor 6
+Person_0 is getting out of the elevator at floor 7
+Person_5 makes request at 18/03/2019 19:36:44 starting at floor 2 with the destination floor 7
+Person_1 makes request at 18/03/2019 19:36:46 starting at floor 1 with the destination floor 9
+Person_1 is getting in the elevator at floor 1
+Person_6 makes request at 18/03/2019 19:36:54 starting at floor 1 with the destination floor 3
+Person_2 makes request at 18/03/2019 19:36:57 starting at floor 3 with the destination floor 2
+Person_0 makes request at 18/03/2019 19:37:33 starting at floor 1 with the destination floor 7
+Person_0 is getting in the elevator at floor 1
+Person_0 is getting out of the elevator at floor 7
+Person_1 makes request at 18/03/2019 19:37:43 starting at floor 0 with the destination floor 6
+Person_1 is getting in the elevator at floor 0
+Person_2 makes request at 18/03/2019 19:37:53 starting at floor 8 with the destination floor 2
+Person_1 is getting out of the elevator at floor 6
+Person_2 is getting in the elevator at floor 8
+Person_3 makes request at 18/03/2019 19:38:03 starting at floor 2 with the destination floor 7
+Person_2 is getting out of the elevator at floor 2
+Person_3 is getting in the elevator at floor 2
+Person_3 is getting out of the elevator at floor 7
+Person_4 makes request at 18/03/2019 19:38:13 starting at floor 5 with the destination floor 3
+Person_4 is getting in the elevator at floor 5
+Person_5 makes request at 18/03/2019 19:38:23 starting at floor 5 with the destination floor 7
+Person_5 is getting in the elevator at floor 5
+Person_5 is getting out of the elevator at floor 7
+Person_6 makes request at 18/03/2019 19:38:33 starting at floor 0 with the destination floor 6
+Person_4 is getting out of the elevator at floor 3
+Person_6 is getting in the elevator at floor 0
+Person_7 makes request at 18/03/2019 19:38:43 starting at floor 7 with the destination floor 5
+Person_6 is getting out of the elevator at floor 6
+Person_7 is getting in the elevator at floor 7
+Person_7 is getting out of the elevator at floor 5
+Person_8 makes request at 18/03/2019 19:38:53 starting at floor 7 with the destination floor 2
+Person_8 is getting in the elevator at floor 7
+Person_8 is getting out of the elevator at floor 2
+Person_9 makes request at 18/03/2019 19:39:03 starting at floor 6 with the destination floor 5
+Person_9 is getting in the elevator at floor 6
+Person_9 is getting out of the elevator at floor 5

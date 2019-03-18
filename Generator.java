@@ -17,8 +17,9 @@ public class Generator implements Runnable {
 
     public void run() {
         int id = 0;
-		while (id < 5) { // just for testing while(true) normally
-			int randomInterval = (int) Math.round(Math.random() * 200);
+		while (id < 10) { // just for testing while(true) normally
+            int randomInterval = (int) Math.round(Math.random() * 200);
+            System.out.println(randomInterval);
 			if (randomInterval > 180) {
                 name = "Person_" + String.valueOf(id);
 				Random r = new Random();
@@ -28,14 +29,13 @@ public class Generator implements Runnable {
 				double tmp_person_weight = r.nextGaussian() * 15 + 73; 
                 this.personWeight = (int) tmp_person_weight;
                 
-                    // this.startFloor = (int) Math.round(Math.random() * 9);
-                this.startFloor = 2;
+                this.startFloor = (int) Math.round(Math.random() * 9);
                 this.endFloor = (int) Math.round(Math.random() * 9);
 
-                // while(startFloor == endFloor) {
-                    // this.startFloor = (int) Math.round(Math.random() * 9);
-                    // this.endFloor = (int) Math.round(Math.random() * 9);
-                // }
+                while(startFloor == endFloor) {
+                    this.startFloor = (int) Math.round(Math.random() * 9);
+                    this.endFloor = (int) Math.round(Math.random() * 9);
+                }
 
                 Thread t = Thread.currentThread(); // get this current thread
                 Request request = new Request(this.startFloor, this.endFloor, this.personWeight + this.trollyWeight, this.name);
@@ -69,7 +69,7 @@ public class Generator implements Runnable {
 
     public static void main(String [] args) {
 		final int TOTAL_FLOORS = 10;
-		ConcurrentHashMap requests = Generator.createRequestMap();
+        ConcurrentHashMap requests = Generator.createRequestMap();
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
 		// Music  music = new Music();
 		Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
@@ -96,7 +96,6 @@ public class Generator implements Runnable {
         else if (state == "FULL") { // getting off the elevator
             output = request.personName + " is not getting on the elevator as it is full  " + request.dest;
         }
-        // System.out.println(output);
         try {
             File file = new File("output.txt");
 
@@ -110,5 +109,4 @@ public class Generator implements Runnable {
             fw.close();
         } catch (Exception e) {e.printStackTrace();}
     }
-
 }

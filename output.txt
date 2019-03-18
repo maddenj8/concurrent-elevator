@@ -1,30 +1,60 @@
-Person_0 is getting in the elevator at floor 2
-Person_0 makes request at 14/03/2019 11:24:15 starting at floor 2 with the destination floor 1
-Person_1 makes request at 14/03/2019 11:24:16 starting at floor 2 with the destination floor 3
-Person_2 makes request at 14/03/2019 11:24:18 starting at floor 2 with the destination floor 4
-Person_3 makes request at 14/03/2019 11:24:19 starting at floor 2 with the destination floor 4
-Person_4 makes request at 14/03/2019 11:24:19 starting at floor 2 with the destination floor 1
+Person_0 makes request at 18/03/2019 20:06:27 starting at floor 1 with the destination floor 0
+Person_1 makes request at 18/03/2019 20:06:28 starting at floor 2 with the destination floor 6
+Person_2 makes request at 18/03/2019 20:06:28 starting at floor 6 with the destination floor 8
+Person_0 is getting in the elevator at floor 1
+Person_3 makes request at 18/03/2019 20:06:29 starting at floor 8 with the destination floor 1
+Person_4 makes request at 18/03/2019 20:06:29 starting at floor 4 with the destination floor 9
 Person_1 is getting in the elevator at floor 2
-Person_2 is getting in the elevator at floor 2
+Person_4 is getting in the elevator at floor 4
+Person_5 makes request at 18/03/2019 20:06:32 starting at floor 4 with the destination floor 5
+Person_1 is getting out of the elevator at floor 6
+Person_2 is getting in the elevator at floor 6
+Person_6 makes request at 18/03/2019 20:06:34 starting at floor 1 with the destination floor 5
+Person_2 is getting out of the elevator at floor 8
+Person_3 is getting in the elevator at floor 8
+Person_4 is getting out of the elevator at floor 9
+Person_7 is getting in the elevator at floor 8
+Person_7 makes request at 18/03/2019 20:06:36 starting at floor 8 with the destination floor 0
+Person_8 makes request at 18/03/2019 20:06:37 starting at floor 0 with the destination floor 7
+Person_9 makes request at 18/03/2019 20:06:39 starting at floor 9 with the destination floor 2
+Person_5 is getting in the elevator at floor 4
+Person_3 is getting out of the elevator at floor 1
+Person_6 is getting in the elevator at floor 1
+Person_0 is getting out of the elevator at floor 0
+Person_7 is getting out of the elevator at floor 0
+Person_8 is getting in the elevator at floor 0
+Person_5 is getting out of the elevator at floor 5
+Person_6 is getting out of the elevator at floor 5
+Person_8 is getting out of the elevator at floor 7
+Person_9 is getting in the elevator at floor 9
+Person_9 is getting out of the elevator at floor 2
+Person_0 makes request at 18/03/2019 20:07:41 starting at floor 9 with the destination floor 3
+Person_1 makes request at 18/03/2019 20:07:43 starting at floor 8 with the destination floor 7
+Person_2 makes request at 18/03/2019 20:07:44 starting at floor 6 with the destination floor 3
+Person_3 makes request at 18/03/2019 20:07:45 starting at floor 2 with the destination floor 1
+Person_4 makes request at 18/03/2019 20:07:46 starting at floor 1 with the destination floor 2
+Person_2 is getting in the elevator at floor 6
+Person_5 makes request at 18/03/2019 20:07:47 starting at floor 6 with the destination floor 4
+Person_6 makes request at 18/03/2019 20:07:48 starting at floor 4 with the destination floor 7
+Person_7 makes request at 18/03/2019 20:07:49 starting at floor 3 with the destination floor 8
+Person_1 is getting in the elevator at floor 8
+Person_8 makes request at 18/03/2019 20:07:49 starting at floor 7 with the destination floor 9
+Person_9 is getting in the elevator at floor 9
+Person_9 makes request at 18/03/2019 20:07:50 starting at floor 9 with the destination floor 3
+Person_0 is getting in the elevator at floor 9
+Person_1 is getting out of the elevator at floor 7
+Person_8 is getting in the elevator at floor 7
+Person_5 is getting in the elevator at floor 6
+Person_5 is getting out of the elevator at floor 4
+Person_6 is getting in the elevator at floor 4
+Person_2 is getting out of the elevator at floor 3
+Person_9 is getting out of the elevator at floor 3
+Person_0 is getting out of the elevator at floor 3
+Person_7 is getting in the elevator at floor 3
 Person_3 is getting in the elevator at floor 2
-Person_4 is getting in the elevator at floor 2
-Person_0 is getting out of the elevator at floor 1
-Person_4 is getting out of the elevator at floor 1
-Person_1 is getting out of the elevator at floor 3
-Person_2 is getting out of the elevator at floor 4
-Person_3 is getting out of the elevator at floor 4
-Person_0 makes request at 14/03/2019 11:26:46 starting at floor 2 with the destination floor 6
-Person_1 is getting in the elevator at floor 2
-Person_1 makes request at 14/03/2019 11:26:46 starting at floor 2 with the destination floor 0
-Person_2 is getting in the elevator at floor 2
-Person_2 makes request at 14/03/2019 11:26:46 starting at floor 2 with the destination floor 1
-Person_0 is getting in the elevator at floor 2
-Person_3 makes request at 14/03/2019 11:26:49 starting at floor 2 with the destination floor 5
-Person_4 makes request at 14/03/2019 11:26:50 starting at floor 2 with the destination floor 4
-Person_0 is getting out of the elevator at floor 6
-Person_3 is getting in the elevator at floor 2
-Person_4 is getting in the elevator at floor 2
-Person_2 is getting out of the elevator at floor 1
-Person_1 is getting out of the elevator at floor 0
-Person_4 is getting out of the elevator at floor 4
-Person_3 is getting out of the elevator at floor 5
+Person_3 is getting out of the elevator at floor 1
+Person_4 is getting in the elevator at floor 1
+Person_4 is getting out of the elevator at floor 2
+Person_6 is getting out of the elevator at floor 7
+Person_7 is getting out of the elevator at floor 8
+Person_8 is getting out of the elevator at floor 9
