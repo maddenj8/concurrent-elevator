@@ -7,4 +7,8 @@ public class ElevatorController {
 		// coming in, the ElevatorController will adjust what it is doing.
 		// haven't sorted this out yet but that is the plan for this class. 
 	}
+
+	public static String chooseDirection() {
+		return "hello";
+	}
 }

@@ -53,8 +53,8 @@ public class Elevator implements Runnable {
         // go higher, the elevator keeps going up rather than going down.
         
         while(true) {
-            // System.out.println(this.requests.get(this.currentFloor) + " are on the current floor " + this.currentFloor); // null if nobody is on that floor
             this.determinePeopleMovement();
+            // ElevatorController.chooseDirection(this.currentFloor);
             this.chooseDirection();
         }
     }
@@ -75,9 +75,6 @@ public class Elevator implements Runnable {
             this.currentFloor--;
             try {Thread.sleep(this.TRAVEL_TIME);} catch(Exception e) {}
         }
-
-        // System.out.println(">>> On floor " + this.currentFloor + " and I am going " + this.state);
-        // System.out.println("Lowest Requested " + this.lowestRequested + " Higest Requested " + this.highestRequested);
     }
 
     private void determinePeopleMovement() {
