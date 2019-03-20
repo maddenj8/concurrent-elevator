@@ -14,10 +14,11 @@ public class Generator implements Runnable {
     public int TOTAL_FLOORS;
     public String name;
     private Elevator elevator;
+    private Elevator drawing;
 
     public void run() {
-        int id = 0;
-		while (id < 10) { // just for testing while(true) normally
+            int id = 0;
+	    while (id < 100) { // just for testing while(true) normally
             int randomInterval = (int) Math.round(Math.random() * 200);
             System.out.println(randomInterval);
 			if (randomInterval > 180) {
@@ -69,13 +70,15 @@ public class Generator implements Runnable {
 
     public static void main(String [] args) {
 		final int TOTAL_FLOORS = 10;
-        ConcurrentHashMap requests = Generator.createRequestMap();
+        	ConcurrentHashMap requests = Generator.createRequestMap();
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
+		//Drawing drawing = new Drawing(); // I commented this out and for some reason this makes the elevator go up and down 
 		// Music  music = new Music();
 		Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
-		new Thread(generator).start(); // start generating people
 		// new Thread(music).start(); // start generating people
+		new Thread(generator).start(); // start generating people
 		new Thread(elevator).start(); // start up the elevator
+		//new Thread(drawing).start(); // start up the drawing
     }
 
     public synchronized static void writeToFile(Request request, String state) {

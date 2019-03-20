@@ -5,8 +5,9 @@ import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class Elevator implements Runnable {
-    private int maxWeight = 1000; // in kg obviously
+
+public class Elevator implements Runnable  {
+    private int maxWeight = 500; // in kg obviously
     private int currentWeight = 0; // current weight carrying
     private int currentFloor = 0; // start at floor one
     BlockingQueue<Request> peopleInElevator = new ArrayBlockingQueue<>(50); // keep track of people in elevator at one time
@@ -19,7 +20,10 @@ public class Elevator implements Runnable {
     private volatile int lowestRequested = 10; // floor request that goes the lowest
     private volatile int highestRequested = 0; // floor request that goes the highest
     private volatile Boolean elevatorRequested = false;
-    // private Music music = new Music();
+    private String personDidntGetOnName = "";
+    //private Drawing drawing = new Drawing();
+    Drawing drawing = new Drawing();
+ // private Music music = new Music();
 
     public Elevator(Map<Integer, ArrayList> requests, int TOTAL_FLOORS) {
         this.requests = requests;
@@ -82,10 +86,19 @@ public class Elevator implements Runnable {
 
         if (this.state == "UP" && this.currentFloor < this.TOTAL_FLOORS) {
             this.currentFloor++;
+	    drawing.moveElevator(1);
+	    
+	    drawing.validate();
+	    drawing.repaint();
+	    
             try {Thread.sleep(this.TRAVEL_TIME);} catch(Exception e) {}
         }
         else if (this.state == "DOWN" && this.currentFloor > 0) {
             this.currentFloor--;
+	    drawing.moveElevator(0);
+	    drawing.validate();
+	    drawing.repaint();
+	   
             try {Thread.sleep(this.TRAVEL_TIME);} catch(Exception e) {}
         }
         else {
@@ -110,7 +123,12 @@ public class Elevator implements Runnable {
             if (req.dest == this.currentFloor) {
                 // System.out.println(requestLl.personName + " Gets off at " +  this.currentFloor + " he will be missed " );
                 Generator.writeToFile(req, "DEPART");
+		drawing.personGetOff = req.personName + " has departed the elevator off at " +  req.dest;
                 this.currentWeight -= req.totalWeight;
+		if( req.personName ==  personDidntGetOnName){
+			drawing.full = "";	
+		}
+		drawing.weight = "Elevator Weight kg " + this.currentWeight;
                 peopleInElevator.remove(req); // gets off the elevator 
             }
         }     
@@ -121,11 +139,16 @@ public class Elevator implements Runnable {
         for (Object request : requests.get(this.currentFloor)) {
             Request req = (Request) request;
             if (req.totalWeight + this.currentWeight >= this.maxWeight && req.startFloor == this.currentFloor){
-					Generator.writeToFile(req, "FULL");
+		    Generator.writeToFile(req, "FULL");
+		    drawing.full = req.personName + " cant get on at " +  this.currentFloor + " elevator full ";
+		    personDidntGetOnName = req.personName;
+		    
             }
             if (req.startFloor == this.currentFloor && req.totalWeight + this.currentWeight <= this.maxWeight) {
                     peopleInElevator.add(req);
                     this.currentWeight += req.totalWeight;
+		    drawing.weight = "Elevator Weight kg " + this.currentWeight;
+		    drawing.personGetOn = req.personName + " has boarded the elevator at " +  this.currentFloor;
                     Generator.writeToFile(req, "BOARD");
                     toRemove.add(req);
                     if (req.dest > this.highestRequested) {this.highestRequested = req.dest;}
@@ -141,11 +164,15 @@ public class Elevator implements Runnable {
         synchronized(this) {
             if (request.startFloor == this.currentFloor) {
                 if (request.totalWeight + this.currentWeight >= this.maxWeight) {
+		    drawing.full = request.personName + " cant get on at " +  this.currentFloor + " elevator full ";
                     Generator.writeToFile(request, "FULL");
+		    personDidntGetOnName = request.personName;
                 }
                 else {
                     peopleInElevator.add(request);
                     this.currentWeight += request.totalWeight;
+		    drawing.weight = "Elevator Weight kg " + this.currentWeight;
+		    drawing.personGetOn = request.personName + " has boarded the elevator at " +  this.currentFloor;
                     Generator.writeToFile(request, "BOARD");
                 }
             }
