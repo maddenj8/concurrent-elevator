@@ -17,6 +17,5 @@ You have to come up with a way of storing the requests to the elevator e.g. if a
 Assuming the current working directory is the project directory enter the following commands into the command line.
 
 ```
-javac *.java
-java Controller
+./run
 ```
