@@ -123,7 +123,7 @@ public class Elevator implements Runnable  {
             if (req.dest == this.currentFloor) {
                 // System.out.println(requestLl.personName + " Gets off at " +  this.currentFloor + " he will be missed " );
                 Generator.writeToFile(req, "DEPART");
-		drawing.personGetOff = req.personName + " has departed the elevator off at " +  req.dest;
+		drawing.personGetOff = req.personName + " has departed the elevator at floor " +  req.dest;
                 this.currentWeight -= req.totalWeight;
 		if( req.personName ==  personDidntGetOnName){
 			drawing.full = "";	
@@ -140,7 +140,7 @@ public class Elevator implements Runnable  {
             Request req = (Request) request;
             if (req.totalWeight + this.currentWeight >= this.maxWeight && req.startFloor == this.currentFloor){
 		    Generator.writeToFile(req, "FULL");
-		    drawing.full = req.personName + " cant get on at " +  this.currentFloor + " elevator full ";
+		    drawing.full = req.personName + " cant get on at floor " +  this.currentFloor + " elevator full ";
 		    personDidntGetOnName = req.personName;
 		    
             }
@@ -148,7 +148,7 @@ public class Elevator implements Runnable  {
                     peopleInElevator.add(req);
                     this.currentWeight += req.totalWeight;
 		    drawing.weight = "Elevator Weight kg " + this.currentWeight;
-		    drawing.personGetOn = req.personName + " has boarded the elevator at " +  this.currentFloor;
+		    drawing.personGetOn = req.personName + " has boarded the elevator at floor " +  this.currentFloor;
                     Generator.writeToFile(req, "BOARD");
                     toRemove.add(req);
                     if (req.dest > this.highestRequested) {this.highestRequested = req.dest;}
@@ -172,7 +172,7 @@ public class Elevator implements Runnable  {
                     peopleInElevator.add(request);
                     this.currentWeight += request.totalWeight;
 		    drawing.weight = "Elevator Weight kg " + this.currentWeight;
-		    drawing.personGetOn = request.personName + " has boarded the elevator at " +  this.currentFloor;
+		    drawing.personGetOn = request.personName + " has boarded the elevator at floor " +  this.currentFloor;
                     Generator.writeToFile(request, "BOARD");
                 }
             }
