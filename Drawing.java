@@ -16,6 +16,8 @@ public static BufferedImage whitebox;
 private javax.swing.JTextArea textArea;
 int elevOffsetY = 508; //always the answer to make elevator go up one story add 42
 int elevOffsetX = 42; //a french sedan  
+int  currentFloorInt = 0;
+String  currentFloor = "0";
 String  personGetOn = "";
 String  personGetOff = "";
 String  weight = "";
@@ -55,6 +57,8 @@ String  full = "";
 	    int fontSize = 12;
 	    g2.setFont(new Font("Courier", Font.PLAIN, fontSize));
 	    g2.setColor(Color.black);
+	    currentFloor = Integer.toString(currentFloorInt);
+	    g2.drawString("Current Floor: " +  currentFloor, 125, 420);
 	    g2.drawString(weight, 125, 440);
 	    g2.drawString(personGetOn, 125, 460);
 	    g2.drawString(personGetOff, 125, 480);
@@ -68,13 +72,15 @@ String  full = "";
     public void moveElevator(int direction ) {
 
        if( direction == 1){
-		elevOffsetY -= 42;
- 	 }
-	else{
-		elevOffsetY += 42;
+   		elevOffsetY -= 42;
+	    	currentFloorInt += 1; //up
+ 	   }
+	   else{
+	    	elevOffsetY += 42;
+		   currentFloorInt -= 1; //down
 	}
         repaint();	
-	SwingUtilities.updateComponentTreeUI(this);
+		  SwingUtilities.updateComponentTreeUI(this);
 
 	}
     
