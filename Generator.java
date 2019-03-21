@@ -77,18 +77,17 @@ public class Generator implements Runnable {
     }
 
     public static void main(String [] args) {
+        ExecutorService es = Executors.newFixedThreadPool(3);
 		final int TOTAL_FLOORS = 10;
-        	ConcurrentHashMap requests = Generator.createRequestMap();
+        ConcurrentHashMap requests = Generator.createRequestMap();
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
-		//Drawing drawing = new Drawing(); // I commented this out and for some reason this makes the elevator go up and down 
         Music music = new Music();
         Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
         if (args.length == 0 || !(args[0].equals("--silent"))) {
-            new Thread(music).start(); // start generating people
+            es.submit(music);
         }
-		new Thread(generator).start(); // start generating people
-		new Thread(elevator).start(); // start up the elevator
-		//new Thread(drawing).start(); // start up the drawing
+        es.submit(generator);
+        es.submit(elevator);
     }
 
     public synchronized static void writeToFile(Request request, String state) {
