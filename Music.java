@@ -8,10 +8,11 @@ public class Music implements Runnable {
 		try {
 				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(this.getClass().getResource("music.wav"));
 				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
 				clip.start();
 				clip.loop(Clip.LOOP_CONTINUOUSLY);
 		} 
-		catch (Exception ex) {}
+		catch (Exception ex) {System.out.println(ex);}
 	}	
 	public  void ding(){
 		try {

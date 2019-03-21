@@ -82,8 +82,10 @@ public class Generator implements Runnable {
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
 		//Drawing drawing = new Drawing(); // I commented this out and for some reason this makes the elevator go up and down 
         Music music = new Music();
-		Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
-        new Thread(music).start(); // start generating people
+        Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
+        if (args.length == 0 || !(args[0].equals("--silent"))) {
+            new Thread(music).start(); // start generating people
+        }
 		new Thread(generator).start(); // start generating people
 		new Thread(elevator).start(); // start up the elevator
 		//new Thread(drawing).start(); // start up the drawing
