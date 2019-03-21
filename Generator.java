@@ -17,29 +17,18 @@ public class Generator implements Runnable {
     private Elevator drawing;
 
     public void run() {
-            int id = 0;
+        int id = 0;
+        Request request = this.getRequest(id);
+
+        elevator.newRequest(request);
+        Generator.writeToFile(request, "REQUEST");
+        id++;
 	    while (id < 100) { // just for testing while(true) normally
             int randomInterval = (int) Math.round(Math.random() * 200);
-            System.out.println(randomInterval);
 			if (randomInterval > 180) {
-                name = "Person_" + String.valueOf(id);
-				Random r = new Random();
-				if ((int) Math.round(Math.random()) == 1) { // 1= trolly; 0 = no trolly
-					trollyWeight = (int) Math.round(Math.random() * MAX_TROLLY_WEIGHT); // 32 because that is the max you can check in with Ryanair
-				}
-				double tmp_person_weight = r.nextGaussian() * 15 + 73; 
-                this.personWeight = (int) tmp_person_weight;
                 
-                this.startFloor = (int) Math.round(Math.random() * 9);
-                this.endFloor = (int) Math.round(Math.random() * 9);
-
-                while(startFloor == endFloor) {
-                    this.startFloor = (int) Math.round(Math.random() * 9);
-                    this.endFloor = (int) Math.round(Math.random() * 9);
-                }
-
                 Thread t = Thread.currentThread(); // get this current thread
-                Request request = new Request(this.startFloor, this.endFloor, this.personWeight + this.trollyWeight, this.name);
+                request = this.getRequest(id);
                 elevator.newRequest(request);
                 Generator.writeToFile(request, "REQUEST");
 
@@ -64,8 +53,27 @@ public class Generator implements Runnable {
         for (int i = 0; i < 11; i++) {
             map.put(i, new ArrayList<Request>());
         }
-        // System.out.println(map);
         return map;
+    }
+
+    private Request getRequest(int id) {
+        name = "Person_" + String.valueOf(id);
+        Random r = new Random();
+        if ((int) Math.round(Math.random()) == 1) { // 1= trolly; 0 = no trolly
+            trollyWeight = (int) Math.round(Math.random() * MAX_TROLLY_WEIGHT); // 32 because that is the max you can check in with Ryanair
+        }
+        double tmp_person_weight = r.nextGaussian() * 15 + 73; 
+        this.personWeight = (int) tmp_person_weight;
+        
+        this.startFloor = (int) Math.round(Math.random() * 9);
+        this.endFloor = (int) Math.round(Math.random() * 9);
+
+        while(startFloor == endFloor) {
+            this.startFloor = (int) Math.round(Math.random() * 9);
+            this.endFloor = (int) Math.round(Math.random() * 9);
+        }
+
+        return new Request(this.startFloor, this.endFloor, this.personWeight + this.trollyWeight, this.name);
     }
 
     public static void main(String [] args) {
@@ -73,9 +81,9 @@ public class Generator implements Runnable {
         	ConcurrentHashMap requests = Generator.createRequestMap();
 		Elevator elevator = new Elevator(requests, TOTAL_FLOORS);
 		//Drawing drawing = new Drawing(); // I commented this out and for some reason this makes the elevator go up and down 
-		// Music  music = new Music();
+        Music music = new Music();
 		Generator generator = new Generator(requests, TOTAL_FLOORS, elevator);
-		// new Thread(music).start(); // start generating people
+        new Thread(music).start(); // start generating people
 		new Thread(generator).start(); // start generating people
 		new Thread(elevator).start(); // start up the elevator
 		//new Thread(drawing).start(); // start up the drawing
